@@ -2,6 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import clsx from 'clsx';
 
 interface TooltipProps {
   children: ReactNode;
@@ -20,19 +21,27 @@ export function Tooltip({ children, content, position = 'top' }: TooltipProps) {
   };
 
   return (
-    <div 
+    <div
       className="relative inline-block"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      
+
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: position === 'top' ? 5 : -5 }}
+            initial={{
+              opacity: 0,
+              scale: 0.95,
+              y: position === 'top' ? 5 : -5,
+            }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: position === 'top' ? 5 : -5 }}
+            exit={{
+              opacity: 0,
+              scale: 0.95,
+              y: position === 'top' ? 5 : -5,
+            }}
             transition={{ duration: 0.15 }}
             className={clsx(
               'absolute z-50 pointer-events-none',
@@ -44,24 +53,26 @@ export function Tooltip({ children, content, position = 'top' }: TooltipProps) {
                 {content}
               </p>
             </div>
-            
+
             {/* Arrow */}
-            <div className={clsx(
-              'absolute w-2 h-2 bg-zinc-900 border border-zinc-800 rotate-45',
-              {
-                'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 border-t-0 border-l-0': position === 'top',
-                'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 border-b-0 border-r-0': position === 'bottom',
-                'right-0 top-1/2 -translate-y-1/2 translate-x-1/2 border-t-0 border-r-0': position === 'left',
-                'left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 border-b-0 border-l-0': position === 'right',
-              }
-            )} />
+            <div
+              className={clsx(
+                'absolute w-2 h-2 bg-zinc-900 border border-zinc-800 rotate-45',
+                {
+                  'bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 border-t-0 border-l-0':
+                    position === 'top',
+                  'top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 border-b-0 border-r-0':
+                    position === 'bottom',
+                  'right-0 top-1/2 -translate-y-1/2 translate-x-1/2 border-t-0 border-r-0':
+                    position === 'left',
+                  'left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 border-b-0 border-l-0':
+                    position === 'right',
+                }
+              )}
+            />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
-}
-
-function clsx(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
 }
